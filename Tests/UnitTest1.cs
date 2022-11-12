@@ -1,5 +1,9 @@
 
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using TreeRules;
+using TreeRules.RuleGroups;
+using TreeRules.Rules;
 
 namespace Tests
 {
@@ -32,7 +36,7 @@ namespace Tests
         {
             var x = 3;
             var y = 2;
-            var rule1 = new AndRuleGroup(new GteRule(x, y));
+            var rule1 = new All(new Gte(x, y));
 
             Assert.True(rule1.Evaluate());
         }
@@ -41,7 +45,7 @@ namespace Tests
         {
             var x = 3;
             var y = 2;
-            var rule1 = new GteRule(x, y);
+            var rule1 = new Gte(x, y);
 
             Assert.True(rule1);
         }
@@ -51,18 +55,37 @@ namespace Tests
         {
             var x = 1;
             var y = 2;
-            var rule1 = new OrRuleGroup(new  LteRule(x, y), new LteRule(y, x));
+            var rule1 = new Any(new Lte(x, y), new Lte(y, x));
 
             Assert.True(rule1);
         }
+
 
         [Fact]
         public void Test5()
         {
             var x = 1;
             var y = 2;
-            var rule1 = new OrRuleGroup(new LteRule(x, y), new OrRuleGroup(new GteRule(y, x), new GteRule(x, x)));
+            var rule1 = new Any(
+                                new Lte(x, y),
+                                                new All(new Gte(y, x), new Gte(x, x))
+                                        );
+            var json = JsonConvert.SerializeObject(rule1);
+            Assert.True(rule1.Evaluate());
+        }
 
+
+        [Fact]
+        public void TestBranch()
+        {
+            var x = 1;
+            var y = 2;
+            var rule1 = new Branch(
+                            new Gte(y,x),
+                            new Gte(x,y),
+                            new Lte(x,y)
+                        );
+            var json = JsonConvert.SerializeObject(rule1);
             Assert.True(rule1.Evaluate());
         }
     }
