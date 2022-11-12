@@ -34,6 +34,7 @@ namespace TreeRules.Rules
         public override bool Evaluate()
         {
             return _result = _left.CompareTo(_right) > 0;
+
         }
 
     }

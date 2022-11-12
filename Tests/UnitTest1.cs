@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using TreeRules;
+using F = TreeRules.Functional;
 using TreeRules.RuleGroups;
 using TreeRules.Rules;
 
@@ -121,9 +122,23 @@ namespace Tests
         [Fact]
         public void TestBook()
         {
+            var x = 1;
+            var y = 2;
+
+           
+            var rule1 =  F.Xor(F.Equal(x, 1), F.Gt(y, x));
+            var result = rule1.Evaluate();
+
+            var json = JsonConvert.SerializeObject(rule1);
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void TestGlobal()
+        {
             int x = 1;
             int y = 2;
-            var ruleBook = new XorTest(x,y);
+            var ruleBook = new XorTest(x, y);
             var result = ruleBook.Evaluate();
 
             var json = JsonConvert.SerializeObject(ruleBook);
