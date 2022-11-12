@@ -8,7 +8,7 @@ using TreeRules.Core;
 
 namespace TreeRules.Rules
 {
-    public class Branch : Rule
+    public class BranchRule : Rule
     {
         private readonly ITreeRule _condition;
         private readonly ITreeRule _left;
@@ -21,7 +21,7 @@ namespace TreeRules.Rules
 
         public override string Evaluation => $"({_left.Result}, {_right.Result})?{_result}";
 
-        public Branch(ITreeRule condition, ITreeRule left, ITreeRule right)
+        public BranchRule(ITreeRule condition, ITreeRule left, ITreeRule right)
         {
             _condition = condition;
             _left = left;

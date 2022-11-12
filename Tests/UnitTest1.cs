@@ -36,7 +36,7 @@ namespace Tests
         {
             var x = 3;
             var y = 2;
-            var rule1 = new All(new Gte(x, y));
+            var rule1 = new AllRuleGroup(new GteRule(x, y));
 
             Assert.True(rule1.Evaluate());
         }
@@ -45,7 +45,7 @@ namespace Tests
         {
             var x = 3;
             var y = 2;
-            var rule1 = new Gte(x, y);
+            var rule1 = new GteRule(x, y);
 
             Assert.True(rule1);
         }
@@ -55,7 +55,7 @@ namespace Tests
         {
             var x = 1;
             var y = 2;
-            var rule1 = new Any(new Lte(x, y), new Lte(y, x));
+            var rule1 = new AnyRuleGroup(new LteRule(x, y), new LteRule(y, x));
 
             Assert.True(rule1);
         }
@@ -66,9 +66,9 @@ namespace Tests
         {
             var x = 1;
             var y = 2;
-            var rule1 = new Any(
-                                new Lte(x, y),
-                                                new All(new Gte(y, x), new Gte(x, x))
+            var rule1 = new AnyRuleGroup(
+                                new LteRule(x, y),
+                                                new AllRuleGroup(new GteRule(y, x), new GteRule(x, x))
                                         );
             var json = JsonConvert.SerializeObject(rule1);
             Assert.True(rule1.Evaluate());
@@ -80,13 +80,54 @@ namespace Tests
         {
             var x = 1;
             var y = 2;
-            var rule1 = new Branch(
-                            new Gte(y,x),
-                            new Gte(x,y),
-                            new Lte(x,y)
+            var rule1 = new BranchRule(
+                            new LteRule(y, x),
+                            new GteRule(x, y),
+                            new LteRule(x, y)
                         );
             var json = JsonConvert.SerializeObject(rule1);
-            Assert.True(rule1.Evaluate());
+            var res = rule1.Evaluate();
+            Assert.True(res);
+        }
+
+        [Fact]
+        public void TestXor()
+        {
+            var x = 1;
+            var y = 2;
+            var rule1 = new XorRuleGroup(new EqualRule(x, 1), new GtRule(y, x));
+            var result = rule1.Evaluate();
+
+            var json = JsonConvert.SerializeObject(rule1);
+            Assert.True(result);
+        }
+
+
+        class XorTest: RuleBook
+        {
+            private XorRuleGroup rule1;
+
+            public XorTest(int x,int y)
+            {
+                rule1 = Xor(Equal(x, 1), Gt(y, x));
+
+            }
+            public override bool Evaluate()
+            {
+                return rule1.Evaluate();
+            }
+        }
+
+        [Fact]
+        public void TestBook()
+        {
+            int x = 1;
+            int y = 2;
+            var ruleBook = new XorTest(x,y);
+            var result = ruleBook.Evaluate();
+
+            var json = JsonConvert.SerializeObject(ruleBook);
+            Assert.True(result);
         }
     }
 }

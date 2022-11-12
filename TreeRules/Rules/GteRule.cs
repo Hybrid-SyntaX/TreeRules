@@ -8,7 +8,7 @@ using TreeRules.Core;
 
 namespace TreeRules.Rules
 {
-    public class Gte : Rule
+    public class GteRule : Rule
     {
         private readonly IComparable _left;
         private readonly IComparable _right;
@@ -21,7 +21,7 @@ namespace TreeRules.Rules
 
         public override bool Result => _result;
 
-        public Gte(IComparable left, IComparable right,
+        public GteRule(IComparable left, IComparable right,
             [CallerArgumentExpression("left")] string leftVar = null,
             [CallerArgumentExpression("right")] string rightVar = null)
         {

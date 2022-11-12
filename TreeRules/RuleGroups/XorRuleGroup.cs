@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,13 +9,13 @@ using TreeRules.Core;
 
 namespace TreeRules.RuleGroups
 {
-    public class All : RuleGroup
+    public class XorRuleGroup : RuleGroup
     {
         private List<bool> _results = new List<bool>();
         private bool _reuslt;
 
         private List<string> _evaluations =new List<string>();
-        public All(params ITreeRule[] rules) : base(rules)
+        public XorRuleGroup(params ITreeRule[] rules) : base(rules)
         {
         }
 
@@ -26,13 +28,13 @@ namespace TreeRules.RuleGroups
 
         public override bool Evaluate()
         {
-            return _reuslt = rules.All(x =>
+
+            foreach (var rule in rules)
             {
-                var result= x.Evaluate();
+                _reuslt ^= rule.Evaluate();
+            }
 
-
-                return result;
-            });
+            return _reuslt;
         }
     }
 }
