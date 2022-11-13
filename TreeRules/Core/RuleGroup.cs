@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 namespace TreeRules.Core
 {
     public abstract class RuleGroup : ITreeRule
+
     {
+        public string OperatorName => GetType().Name;
+
         protected List<ITreeRule> rules = new List<ITreeRule>();
 
-        public virtual string Description => string.Join($" {sign} ", rules.Select(x => x.Description));
-        public virtual string Evaluation => string.Join($" {sign} ", rules.Select(x => x.Evaluation));
+        public virtual string Description => $"[ {string.Join($" {sign} ", rules.Select(x => x.Description))} ]";
+        public virtual string Evaluation => $"[ {string.Join($" {sign} ", rules.Select(x => x.Evaluation))} ]";
 
         protected abstract string sign { get; }
 

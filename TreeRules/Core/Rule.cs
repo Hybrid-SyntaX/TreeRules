@@ -8,6 +8,8 @@ namespace TreeRules.Core
 {
     public abstract class Rule : ITreeRule
     {
+        public string OperatorName => GetType().Name;
+
         public abstract bool Evaluate();
         public abstract string Description { get; }
         public abstract string Evaluation { get; }

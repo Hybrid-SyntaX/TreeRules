@@ -7,13 +7,13 @@ using TreeRules.Core;
 
 namespace TreeRules.RuleGroups
 {
-    public class AnyRuleGroup : RuleGroup
+    public class Any : RuleGroup
     {
         private List<bool> _results = new List<bool>();
         private bool _reuslt;
 
         
-        public AnyRuleGroup(params ITreeRule[] rules) : base(rules)
+        public Any(params ITreeRule[] rules) : base(rules)
         {
         }
 
